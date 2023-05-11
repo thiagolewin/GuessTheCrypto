@@ -16,9 +16,11 @@ dificultad = parseInt(BDificultad.value)
 listaCripto.removeChild(criptoLista)
 let respuestaJson
 async function AsignarCripto() {
-    const respuesta = await fetch(`https://api.coinlore.net/api/tickers/?limit=${dificultad}`)
-    respuestaJson = await respuesta.json();
-    respuestaJson = (respuestaJson.data)
+    if (!respuestaJson) {
+        const respuesta = await fetch(`https://api.coinlore.net/api/tickers/?limit=28`)
+        respuestaJson = await respuesta.json();
+        respuestaJson = (respuestaJson.data)
+    }
     console.log(respuestaJson)
     random = NumeroRandom(dificultad-1,0)
     cripto = respuestaJson[random]
@@ -36,7 +38,7 @@ async function AsignarCripto() {
     tarjeta.children[4].style.backgroundColor = "black"
     tarjeta.children[5].style.backgroundColor = "black"
     tarjeta.children[5].style.color = "black"
-    for(let i = 0; i<dificultad;i++) {
+    for(let i = 0; i<28;i++) {
         const nuevaLista = criptoLista.cloneNode(true)
         nuevaLista.children[0].src = `https://assets.coincap.io/assets/icons/${(respuestaJson[i].symbol).toLowerCase()}@2x.png`
         nuevaLista.children[1].textContent = respuestaJson[i].symbol
@@ -54,7 +56,7 @@ async function AsignarCripto() {
     }
 }
 function ListaInputs() {
-    for (let i = 0;i<dificultad;i++) {
+    for (let i = 0;i<28;i++) {
         if ((respuestaJson[i].symbol).toLowerCase().startsWith(input.value.toLowerCase()) && input.value != "" ||  (respuestaJson[i].name).toLowerCase().startsWith(input.value.toLowerCase()) && input.value != "") {
             listaCripto.children[i].style.display = "flex"
         } else {
